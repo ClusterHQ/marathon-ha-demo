@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+load '../aws_credentials.rb'
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+ 
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+
+  config.vm.provider :aws do |aws, override|
+    inject_aws_credentials(aws, override, "builderami")
+    inject_aws_instance_name(aws, "amibuilder")
+  end
+
+  config.vm.define "ami" do |ami|
+    ami.vm.hostname = "ami"
+    ami.vm.provision "file", source: "./install.sh", destination: "/tmp/install.sh"
+    ami.vm.provision "shell", inline: "bash /tmp/install.sh"
+  end
+end
+
+begin
+  load 'Vagrantfile.local'
+rescue LoadError
+end
