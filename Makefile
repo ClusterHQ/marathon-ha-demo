@@ -1,10 +1,10 @@
-.PHONY: cluster ami
+.PHONY: nodes destroy ami
 
-cluster:
-	bash cluster.sh
+nodes:
+	bash createnodes.sh
 
 destroy:
-	vagrant destroy -f
+	bash destroynodes.sh
 
 ami:
 	cd amibuilder && bash build.sh
