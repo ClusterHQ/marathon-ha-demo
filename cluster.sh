@@ -33,7 +33,7 @@ wrap-scp() {
   scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEYPAIR_PATH $@
 }
 
-upload-file() {
+upload-cert() {
   local node=$1
   local certfolder=$2
   local file=$3

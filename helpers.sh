@@ -5,9 +5,11 @@ set -e
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
+# use the aws cli filters to filter the list of nodes based on name and running
+# then extract the InstanceId using a query
 get-node-property-from-name() {
-  local $NODE_NAME="$1"
-  local $PROPERTY="$2"
+  local NODE_NAME="$1"
+  local PROPERTY="$2"
   aws ec2 describe-instances \
     --filters "Name=tag:Name,Values=marathon-ha-demo-${NODE_NAME}" \
     "Name=instance-state-name,Values=pending,running" \
@@ -16,24 +18,34 @@ get-node-property-from-name() {
 
 # extract the instanceID of a node based on its name
 get-node-id-from-name() {
-  local $NODE_NAME="$1"
+  local NODE_NAME="$1"
   get-node-property-from-name $NODE_NAME InstanceId
 }
 
 # extract the public IP of a node based on its name
-get-public-id-from-name() {
-  local $NODE_NAME="$1"
+get-public-ip-from-name() {
+  local NODE_NAME="$1"
   get-node-property-from-name $NODE_NAME PublicIpAddress
 }
 
 # extract the private IP of a node based on its name
-get-private-id-from-name() {
-  local $NODE_NAME="$1"
+get-private-ip-from-name() {
+  local NODE_NAME="$1"
   get-node-property-from-name $NODE_NAME PrivateIpAddress
 }
 
 # get the current status of a node based on aws ec2 describe-instance-status
 get-node-status() {
-  local instanceid="$1"
-  aws ec2 describe-instance-status --instance-id $instanceid --query "InstanceStatuses[0].InstanceStatus.Status"
+  local NODE_ID="$1"
+  aws ec2 describe-instance-status --instance-id $NODE_ID --query "InstanceStatuses[0].InstanceStatus.Status"
+}
+
+# make the SCP commands shorter by wrapping the private key and connection opts
+wrap-scp() {
+  scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_PATH $@
+}
+
+# make the SSH commands shorter by wrapping the private key and connection opts
+wrap-ssh() {
+  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_PATH $@
 }
