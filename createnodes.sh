@@ -23,8 +23,12 @@ initialize() {
 }
 
 check-variables() {
-  if [[ -z "$KEYNAME" ]]; then
-    >&2 echo "Please specify a KEYNAME that is the name of the key-pair you have created"
+  if [[ -z "$KEY_NAME" ]]; then
+    >&2 echo "Please specify a KEY_NAME that is the name of the key-pair you have created"
+    exit 1
+  fi
+  if [[ -z "$KEY_PATH" ]]; then
+    >&2 echo "Please specify a KEY_PATH that is the path of the private key for the key-pair"
     exit 1
   fi
 }
@@ -32,7 +36,7 @@ check-variables() {
 create-aws-instances() {
   # create the 3 instances
   echo "running aws ec2 run-instances for 3 nodes"
-  aws ec2 run-instances --image-id $AMI_ID --count 3 --instance-type $INSTANCE_TYPE --key-name $KEYNAME > $DATA_FOLDER/nodes.json
+  aws ec2 run-instances --image-id $AMI_ID --count 3 --instance-type $INSTANCE_TYPE --key-name $KEY_NAME > $DATA_FOLDER/nodes.json
   # loop over them and assign a Name tag
   local COUNTER=0
   for NODE_ID in `cat $DATA_FOLDER/nodes.json | grep InstanceId | cut -d '"' -f4`; do
@@ -48,6 +52,6 @@ create-aws-instances() {
   done
 }
 
-initialize
 check-variables
+initialize
 create-aws-instances
