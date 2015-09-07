@@ -10,13 +10,12 @@ source $DIR/vars.sh
 source $DIR/helpers.sh
 
 destroy-node() {
-  local name="$1"
-  local id=$(get-node-id-from-name $name)
-  echo "destroying node $name ($id)"
-  aws ec2 terminate-instances --instance-ids $id > /dev/null
+  local NODE_NAME="$1"
+  local NODE_ID=$(get-node-id-from-name $NODE_NAME)
+  echo "destroying node $NODE_NAME ($NODE_ID)"
+  aws ec2 terminate-instances --instance-ids $NODE_ID > /dev/null
 }
 
 destroy-node master
 destroy-node node1
 destroy-node node2
-rm -rf $DATA_FOLDER
