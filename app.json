@@ -1,0 +1,32 @@
+{
+  "id":"marathon-ha-demo",
+  "apps":[{
+    "id": "moby-counter",
+    "container": {
+      "type": "DOCKER",
+      "docker": {
+        "image": "binocarlos/moby-counter:localfile",
+        "network": "BRIDGE",
+        "portMappings": [{
+          "containerPort": 80,
+          "hostPort": 8500,
+          "protocol": "tcp"
+        }],
+        "parameters": [{
+          "key": "volume-driver",
+          "value": "flocker"
+        },{
+          "key": "volume",
+          "value": "marathondemo:/data"
+        }]
+      },
+      "forcePullImage":true
+    },
+    "ports":[
+      8500
+    ],
+    "instances": 1,
+    "cpus": 0.5,
+    "mem": 512
+  }]
+}
