@@ -16,6 +16,12 @@ echo "getting private IP addresses for cluster"
 MASTER_PRIVATE=$(vagrant awsinfo -m master -p | grep private_ip | cut -d '"' -f4)
 NODE1_PRIVATE=$(vagrant awsinfo -m node1 -p | grep private_ip | cut -d '"' -f4)
 NODE2_PRIVATE=$(vagrant awsinfo -m node2 -p | grep private_ip | cut -d '"' -f4)
+echo "getting node IDs for cluster"
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TBC
+NODE1_ID=$(vagrant awsinfo -m node1 -p | grep private_ip | cut -d '"' -f4)
+NODE2_ID=$(vagrant awsinfo -m node2 -p | grep private_ip | cut -d '"' -f4)
+
 echo "getting AWS info"
 KEYPAIR_PATH=$(cat .aws_secrets | grep keypair_path | awk '{print $2}')
 AWS_ACCESS_KEY_ID=$(cat .aws_secrets | grep access_key_id | awk '{print $2}')
@@ -102,7 +108,21 @@ ATTRIBUTES='' \
 bash /tmp/install.sh"
 }
 
+setup-loadbalancer() {
+
+}
+
 setup-certs
 setup-master
 setup-slave node1 $NODE1_PRIVATE
 setup-slave node2 $NODE2_PRIVATE
+setup-loadbalancer
+
+echo
+echo "--------------------------------------------------------------------"
+echo
+echo "Cluster installed"
+echo "Mesos Master: http://${MASTER_PUBLIC}:5050"
+echo "Marathon Master: http://${MASTER_PUBLIC}:8080"
+echo "Node1: ${NODE1_PUBLIC} ${NODE1_PRIVATE}"
+echo "Node2: ${NODE2_PUBLIC} ${NODE2_PRIVATE}"
