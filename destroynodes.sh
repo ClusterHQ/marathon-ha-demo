@@ -7,10 +7,11 @@ echo "Destroying cluster"
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/vars.sh
+source $DIR/helpers.sh
 
 destroy-node() {
   local name="$1"
-  local id=$(cat $DATA_FOLDER/$name.txt | grep "id: " | awk '{print $2}')
+  local id=$(get-node-id-from-name $name)
   echo "destroying node $name ($id)"
   aws ec2 terminate-instances --instance-ids $id > /dev/null
 }
