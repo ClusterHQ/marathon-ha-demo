@@ -89,7 +89,7 @@ prepare-instance() {
   echo "Uploading provisioning scripts to $NODE_NAME"
   wrap-scp $DIR/uploads/* ubuntu@$NODE_IP:/tmp
   echo "Creating required folders on $NODE_NAME"
-  wrap-ssh ubuntu@$NODE_IP sudo mkdir -p /etc/flocker && mkdir /tmp/flocker-copy-certs
+  wrap-ssh ubuntu@$NODE_IP sudo mkdir -p /etc/flocker && mkdir -p /tmp/flocker-copy-certs
 }
 
 # prepare the nodes with the provisioning scripts
