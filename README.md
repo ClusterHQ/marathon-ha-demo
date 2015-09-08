@@ -57,6 +57,9 @@ One instance will run the Flocker control service along with the Mesos master, a
 
 Once the cluster has completed building using `make`, it will print some useful information which you should save for use later on in this tutorial.
 
+Along with the EC2 instances, the Makefile will create an Elastic Load Balancer (ELB). 
+This is so that we can always visit the application at the same address, regardless of the EC2 instance it is located on.
+
 
 ### Running an Application
 
