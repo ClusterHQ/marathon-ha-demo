@@ -81,6 +81,32 @@ wait-for-instances() {
   done
 }
 
+# ensure that we don't aleady have a load balancer with the specific name
+check-if-load-balancer-exists() {
+
+}
+
+# create a load-balancer that gives us a static DNS that will dynamically
+# route to the node the app is running on
+create-load-balancer() {
+  local LOAD_BALANCER_NAME="${PREPEND_TAG}-elb"
+  local NODE1_ID=$(get-node-id-from-name node1)
+  local NODE2_ID=$(get-node-id-from-name node2)
+  aws elb create-load-balancer \
+    --load-balancer-name $LOAD_BALANCER_NAME \
+    --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8500" \
+    --availability-zones $AWS_ZONE \
+    --region $AWS_REGION
+
+  aws elb configure-health-check \
+    --load-balancer-name $LOAD_BALANCER_NAME \
+    --health-check "Target=HTTP:8500/,Interval=5,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=2"
+
+  aws elb register-instances-with-load-balancer \
+    --load-balancer-name $LOAD_BALANCER_NAME \
+    --instances $NODE1_ID $NODE2_ID
+}
+
 # upload the contents of ./uploads to each node
 # these scripts are used to create certs and provision the cluster
 prepare-instance() {
