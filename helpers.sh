@@ -52,5 +52,5 @@ wrap-scp() {
 
 # make the SSH commands shorter by wrapping the private key and connection opts
 wrap-ssh() {
-  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_PATH $@
+  ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $KEY_PATH $@
 }
