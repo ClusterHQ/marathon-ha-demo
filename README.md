@@ -42,6 +42,14 @@ There's no need to specify default regions, however you may want to do this for 
 In order for us to communicate with the instances which you provisions, you will need to ensure your keypair is added to the [`US-East-1` region](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#KeyPairs:sort=keyName). 
 We depend on this region as that is where our base AMI is located.
 
+### Preparation
+
+Once you have created a keypair using the AWS control panel - you must define 2 variables as follows:
+
+```bash
+export KEY_NAME=<Key name as on AWS>
+export KEY_PATH=<Path to private key>
+```
 
 ### Bringing the Cluster Online
 
@@ -49,7 +57,7 @@ Once you have set your configuration, you can begin.
 To initially get the cluster up we need to set a few environment variables and run `make nodes`.
 
 ```bash
-KEY_NAME=<Key name as on AWS> KEY_PATH=<Path to private key> make nodes
+make nodes
 ```
 
 This will build a Mesos cluster with three EC2 instances. 
