@@ -7,7 +7,7 @@
 To simplify this demonstation, we have put together a Git repository with useful utilities such as some bash files and a Makefile. 
 
 ```bash
-git clone https://github.com/ClusterHQ/marathon-ha-demo.git
+$ git clone https://github.com/ClusterHQ/marathon-ha-demo.git
 ```
 
 
@@ -22,7 +22,7 @@ Installation of the [AWS CLI](https://aws.amazon.com/cli/) is fairly simple.
 In most cases you can install AWS CLI by running:
 
 ```bash
-pip install awscli
+$ pip install awscli
 ```
 
 > **Note:** If this is not successful, refer to the [AWS CLI installation documentation](https://aws.amazon.com/cli/).
@@ -30,7 +30,7 @@ pip install awscli
 Before we can proceed, you will need to configure the AWS CLI with your AWS API credentials.
 
 ```bash
-aws configure
+$ aws configure
 ```
 
 You will need to input your AWS API credentials, you can find information on how to generate this information from the [AWS documentation](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html). 
@@ -47,8 +47,8 @@ We depend on this region as that is where our base AMI is located.
 Once you have created a keypair using the AWS control panel - you must define 2 variables as follows:
 
 ```bash
-export KEY_NAME=<Key name as on AWS>
-export KEY_PATH=<Path to private key>
+$ export KEY_NAME=<Key name as on AWS>
+$ export KEY_PATH=<Path to private key>
 ```
 
 ### Bringing the Cluster Online
@@ -57,7 +57,7 @@ Once you have set your configuration, you can begin.
 To initially get the cluster up we need to set a few environment variables and run `make nodes`.
 
 ```bash
-make nodes
+$ make nodes
 ```
 
 This will build a Mesos cluster with three EC2 instances. 
@@ -87,5 +87,5 @@ We need to inform Marathon about this application, in order to do this we will p
 > **Note:** You will need to change the IP `172.16.79.250` to the IP of your master server which was displayed when you made the cluster.
 
 ```bash
-curl -i -H 'Content-type: application/json' --data @app.json http://172.16.79.250:8080/v2/groups
+$ curl -i -H 'Content-type: application/json' --data @app.json http://172.16.79.250:8080/v2/groups
 ```
