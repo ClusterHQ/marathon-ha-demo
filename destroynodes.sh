@@ -13,7 +13,7 @@ destroy-node() {
   local NODE_NAME="$1"
   local NODE_ID=$(get-node-id-from-name $NODE_NAME)
   echo "destroying node $NODE_NAME ($NODE_ID)"
-  aws ec2 terminate-instances --instance-ids $NODE_ID > /dev/null
+  aws ec2 terminate-instances --region $AWS_REGION --instance-ids $NODE_ID > /dev/null
 }
 
 destroy-node master
