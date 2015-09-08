@@ -35,9 +35,12 @@ get-private-ip-from-name() {
 }
 
 # get the current status of a node based on aws ec2 describe-instance-status
+# if this is not "ok" then the node is not ready yet
 get-node-status() {
   local NODE_ID="$1"
-  aws ec2 describe-instance-status --instance-id $NODE_ID --query "InstanceStatuses[0].InstanceStatus.Status"
+  aws ec2 describe-instance-status \
+    --instance-id $NODE_ID \
+    --query "InstanceStatuses[0].InstanceStatus.Status"
 }
 
 # make the SCP commands shorter by wrapping the private key and connection opts

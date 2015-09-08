@@ -14,8 +14,19 @@ source $DIR/helpers.sh
 create-aws-instance() {
   local NODE_NAME="$1"
   echo "Creating AWS Instance for: $NODE_NAME"
-  local NODE_ID=$(aws ec2 run-instances --image-id $AMI_ID --count 1 --instance-type $INSTANCE_TYPE --key-name $KEY_NAME --query 'Instances[0].InstanceId')
-  aws ec2 create-tags --resource $NODE_ID --tags "Key=\"Name\",Value=${PREPEND_TAG}-${NODE_NAME}"
+  # create the node and get the InstanceId using a query
+  local NODE_ID=$(aws ec2 run-instances \
+    --image-id $AMI_ID \
+    --count 1 \
+    --region $AWS_REGION \
+    --placement AvailabilityZone=$AWS_ZONE \
+    --instance-type $INSTANCE_TYPE \
+    --key-name $KEY_NAME \
+    --query 'Instances[0].InstanceId')
+  # use the InstanceId to add name tags so we can map node name onto InstanceId
+  aws ec2 create-tags \
+    --resource $NODE_ID \
+    --tags "Key=\"Name\",Value=${PREPEND_TAG}-${NODE_NAME}"
 }
 
 # check if a given NODE_NAME exists and exit if true
@@ -105,9 +116,9 @@ setup-certs() {
 
   # get the public/private IP addresses for the nodes
   local MASTER_PUBLIC=$(get-public-ip-from-name master)
-  local MASTER_PRIVATE=$(get-public-ip-from-name master)
-  local NODE1_PUBLIC=$(get-public-ip-from-name master)
-  local NODE2_PUBLIC=$(get-public-ip-from-name master)
+  local MASTER_PRIVATE=$(get-private-ip-from-name master)
+  local NODE1_PUBLIC=$(get-public-ip-from-name node1)
+  local NODE2_PUBLIC=$(get-public-ip-from-name node2)
 
   # make a temporary local folder in which to save the downloaded certs
   local UNIXSECS=$(date +%s)
@@ -122,6 +133,7 @@ setup-certs() {
   echo "downloading generated certs to $CERTFOLDER"
   wrap-scp ubuntu@$MASTER_PUBLIC:/tmp/flocker-certs/* $CERTFOLDER
 
+  # now we start to distribute the certs across the 3 nodes
   echo "uploading cluster.crt"
   upload-cert $MASTER_PUBLIC $CERTFOLDER cluster.crt
   upload-cert $NODE1_PUBLIC $CERTFOLDER cluster.crt
