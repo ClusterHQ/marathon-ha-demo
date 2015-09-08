@@ -89,7 +89,7 @@ prepare-instance() {
   echo "Uploading provisioning scripts to $NODE_NAME"
   wrap-scp $DIR/uploads/* ubuntu@$NODE_IP:/tmp
   echo "Creating required folders on $NODE_NAME"
-  wrap-ssh ubuntu@$NODE_IP sudo mkdir -p /etc/flocker && mkdir -p /tmp/flocker-copy-certs
+  wrap-ssh ubuntu@$NODE_IP bash -c "sudo mkdir -p /etc/flocker && mkdir -p /tmp/flocker-copy-certs"
 }
 
 # prepare the nodes with the provisioning scripts
@@ -158,9 +158,9 @@ setup-certs() {
   upload-cert $NODE2_PUBLIC $CERTFOLDER plugin.crt
   upload-cert $NODE2_PUBLIC $CERTFOLDER plugin.key
 
-  wrap-ssh ubuntu@$MASTER_PUBLIC sudo cp /tmp/flocker-copy-certs/* /etc/flocker && rm -rf /tmp/flocker-copy-certs && rm -rf /tmp/flocker-certs
-  wrap-ssh ubuntu@$NODE1_PUBLIC sudo cp /tmp/flocker-copy-certs/* /etc/flocker && rm -rf /tmp/flocker-copy-certs
-  wrap-ssh ubuntu@$NODE2_PUBLIC sudo cp /tmp/flocker-copy-certs/* /etc/flocker && rm -rf /tmp/flocker-copy-certs
+  wrap-ssh ubuntu@$MASTER_PUBLIC bash -c "sudo cp /tmp/flocker-copy-certs/* /etc/flocker && rm -rf /tmp/flocker-copy-certs && rm -rf /tmp/flocker-certs"
+  wrap-ssh ubuntu@$NODE1_PUBLIC bash -c "sudo cp /tmp/flocker-copy-certs/* /etc/flocker && rm -rf /tmp/flocker-copy-certs"
+  wrap-ssh ubuntu@$NODE2_PUBLIC bash -c "sudo cp /tmp/flocker-copy-certs/* /etc/flocker && rm -rf /tmp/flocker-copy-certs"
 
   # remove the temp folder we created for the certs
   rm -rf $CERTFOLDER
