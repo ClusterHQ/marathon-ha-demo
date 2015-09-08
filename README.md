@@ -14,6 +14,16 @@ From within this repository you will first need to set your AWS credentials and 
 We have included a sample configuration file which you will need to alter and save as `.aws_secrets`. 
 This is located at `.aws_secrets.example`.
 
+### Prerequisites
+
+
+
+
+HERE
+
+
+
+
 
 ### Bringing the Cluster Online
 
