@@ -18,6 +18,8 @@ mesos-master() {
   echo "$MY_ADDRESS" > /etc/mesos-master/hostname
   echo "$MY_ADDRESS" > /etc/mesos-master/ip
   echo "$MY_ADDRESS" > /etc/marathon/conf/hostname
+  echo "1" > /etc/mesos-master/slave_ping_timeout
+  echo "2" > /etc/mesos-master/max_slave_ping_timeouts
   
   rm /etc/init/zookeeper.override
   rm /etc/init/mesos-master.override
