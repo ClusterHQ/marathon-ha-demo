@@ -25,6 +25,7 @@ create-aws-instance() {
     --query 'Instances[0].InstanceId')
   # use the InstanceId to add name tags so we can map node name onto InstanceId
   aws ec2 create-tags \
+    --region $AWS_REGION \
     --resource $NODE_ID \
     --tags "Key=\"Name\",Value=${PREPEND_TAG}-${NODE_NAME}"
 }

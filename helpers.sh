@@ -11,6 +11,7 @@ get-node-property-from-name() {
   local NODE_NAME="$1"
   local PROPERTY="$2"
   aws ec2 describe-instances \
+    --region $AWS_REGION \
     --filters "Name=tag:Name,Values=marathon-ha-demo-${NODE_NAME}" \
     "Name=instance-state-name,Values=pending,running" \
     --query "Reservations[0].Instances[0].${PROPERTY}"
@@ -39,6 +40,7 @@ get-private-ip-from-name() {
 get-node-status() {
   local NODE_ID="$1"
   aws ec2 describe-instance-status \
+    --region $AWS_REGION \
     --instance-id $NODE_ID \
     --query "InstanceStatuses[0].InstanceStatus.Status"
 }

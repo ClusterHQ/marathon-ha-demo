@@ -4,34 +4,52 @@
 
 ## Demo
 
-To simplify this demonstation, we have put together a Git repository with useful utilities such as Vagrantfiles and a Makefile. 
+To simplify this demonstation, we have put together a Git repository with useful utilities such as some bash files and a Makefile. 
 
 ```bash
 git clone https://github.com/ClusterHQ/marathon-ha-demo.git
 ```
 
-From within this repository you will first need to set your AWS credentials and the path to your SSH keypair. 
-We have included a sample configuration file which you will need to alter and save as `.aws_secrets`. 
-This is located at `.aws_secrets.example`.
 
 ### Prerequisites
 
 
+#### `aws cli`
+
+To run this demonstation you should only require the AWS CLI, and have your keypair on AWS. 
+
+Installation of the [AWS CLI](https://aws.amazon.com/cli/) is fairly simple. 
+In most cases you can install AWS CLI by running:
+
+```bash
+pip install awscli
+```
+
+> **Note:** If this is not successful, refer to the [AWS CLI installation documentation](https://aws.amazon.com/cli/).
+
+Before we can proceed, you will need to configure the AWS CLI with your AWS API credentials.
+
+```bash
+aws configure
+```
+
+You will need to input your AWS API credentials, you can find information on how to generate this information from the [AWS documentation](http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html). 
+There's no need to specify default regions, however you may want to do this for other projects.
 
 
-HERE
+#### AWS Keypair
 
-
-
+In order for us to communicate with the instances which you provisions, you will need to ensure your keypair is added to the [`US-East-1` region](https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#KeyPairs:sort=keyName). 
+We depend on this region as that is where our base AMI is located.
 
 
 ### Bringing the Cluster Online
 
 Once you have set your configuration, you can begin. 
-To initially get the cluster up we simply run
+To initially get the cluster up we need to set a few environment variables and run `make nodes`.
 
 ```bash
-make cluster
+KEY_NAME=<Key name as on AWS> KEY_PATH=<Path to private key> make nodes
 ```
 
 This will build a Mesos cluster with three EC2 instances. 
