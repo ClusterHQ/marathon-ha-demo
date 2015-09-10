@@ -9,6 +9,7 @@ export INSTANCE_TYPE=${INSTANCE_TYPE:="c3.large"}
 export PREPEND_TAG=${PREPEND_TAG:="marathon-ha-demo"}
 export AWS_DEFAULT_OUTPUT="text"
 export NODE_NAMES=(master node1 node2)
+export LOAD_BALANCER_NAME="${PREPEND_TAG}-elb"
 export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | grep aws_access_key_id | awk '{print $3}')
 export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | grep aws_secret_access_key | awk '{print $3}')
 # the region is fixed because this is where we have made the AMI
