@@ -41,13 +41,16 @@ check-if-instance-exists() {
   fi
 }
 
-# loop over the list of hostnames and create and instance before tagging it
-create-aws-instances() {
+# loop over the list of hostnames and check if that instance already exists
+check-for-existing-aws-instances() {
   for NODE_NAME in "${NODE_NAMES[@]}"
   do
     check-if-instance-exists $NODE_NAME
   done
+}
 
+# loop over the list of hostnames and create and instance before tagging it
+create-aws-instances() {
   for NODE_NAME in "${NODE_NAMES[@]}"
   do
     create-aws-instance $NODE_NAME
@@ -232,6 +235,7 @@ bash /tmp/install.sh
 }
 
 check-variables
+check-for-existing-aws-instances
 create-aws-instances
 wait-for-instances
 prepare-instances
