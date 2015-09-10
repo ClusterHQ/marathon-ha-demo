@@ -83,7 +83,8 @@ wait-for-instances() {
 
 # ensure that we don't aleady have a load balancer with the specific name
 check-if-load-balancer-exists() {
-
+  aws elb describe-load-balancers \
+    --load-balancer-name marathon-ha-demo-elb --query 'LoadBalancerDescriptions[0].LoadBalancerName'
 }
 
 # create a load-balancer that gives us a static DNS that will dynamically
@@ -92,16 +93,20 @@ create-load-balancer() {
   local LOAD_BALANCER_NAME="${PREPEND_TAG}-elb"
   local NODE1_ID=$(get-node-id-from-name node1)
   local NODE2_ID=$(get-node-id-from-name node2)
+
+  # create the load balancer configured to speak to the application port (8500)
   aws elb create-load-balancer \
     --load-balancer-name $LOAD_BALANCER_NAME \
     --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8500" \
     --availability-zones $AWS_ZONE \
     --region $AWS_REGION
 
+  # add a health check that will route to where the application is running
   aws elb configure-health-check \
     --load-balancer-name $LOAD_BALANCER_NAME \
     --health-check "Target=HTTP:8500/,Interval=5,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=2"
 
+  # add the 2 instances to the load balancer
   aws elb register-instances-with-load-balancer \
     --load-balancer-name $LOAD_BALANCER_NAME \
     --instances $NODE1_ID $NODE2_ID
