@@ -77,6 +77,8 @@ create-aws-instance() {
     --tags "Key=\"Name\",Value=${PREPEND_TAG}-${NODE_NAME}"
 }
 
+
+
 # check if a given NODE_NAME exists and exit if true
 # this is to prevent multiple copies of instances with the same name running at the same time
 check-if-instance-exists() {
@@ -101,6 +103,24 @@ create-aws-instances() {
   for NODE_NAME in "${NODE_NAMES[@]}"
   do
     create-aws-instance $NODE_NAME
+  done
+}
+
+# remove the aws instance with the given name
+remove-aws-instance() {
+  local NODE_NAME="$1"
+  local NODE_ID=$(get-node-id-from-name $NODE_NAME)
+  echo "Removing AWS Instance for: $NODE_NAME"
+  ec2-terminate-instances \
+    --region $AWS_REGION \
+    $NODE_ID
+}
+
+# loop over the list of hostnames and remove each one
+remove-aws-instances() {
+  for NODE_NAME in "${NODE_NAMES[@]}"
+  do
+    remove-aws-instance $NODE_NAME
   done
 }
 
@@ -151,18 +171,20 @@ create-load-balancer() {
 
   # create the load balancer configured to speak to the application port (8500)
   aws elb create-load-balancer \
-    --load-balancer-name $LOAD_BALANCER_NAME \
-    --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8500" \
     --availability-zones $AWS_ZONE \
-    --region $AWS_REGION
+    --region $AWS_REGION \
+    --load-balancer-name $LOAD_BALANCER_NAME \
+    --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8500"
 
   # add a health check that will route to where the application is running
   aws elb configure-health-check \
+    --region $AWS_REGION \
     --load-balancer-name $LOAD_BALANCER_NAME \
     --health-check "Target=HTTP:8500/,Interval=5,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=2"
 
   # add the 2 instances to the load balancer
   aws elb register-instances-with-load-balancer \
+    --region $AWS_REGION \
     --load-balancer-name $LOAD_BALANCER_NAME \
     --instances $NODE1_ID $NODE2_ID
 }
@@ -170,5 +192,6 @@ create-load-balancer() {
 # remove the load-balancer
 remove-load-balancer() {
   aws elb delete-load-balancer \
+    --region $AWS_REGION \
     --load-balancer-name $LOAD_BALANCER_NAME
 }
