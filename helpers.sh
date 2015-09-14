@@ -166,3 +166,9 @@ create-load-balancer() {
     --load-balancer-name $LOAD_BALANCER_NAME \
     --instances $NODE1_ID $NODE2_ID
 }
+
+# remove the load-balancer
+remove-load-balancer() {
+  aws elb delete-load-balancer \
+    --load-balancer-name $LOAD_BALANCER_NAME
+}
