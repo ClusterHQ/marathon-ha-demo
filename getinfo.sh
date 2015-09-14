@@ -15,11 +15,13 @@ if [[ "$MASTER_PUBLIC" == "None" ]]; then
     >&2 echo "The master node cannot be found - please run 'make cluster' to create the required resources"
     exit 1
 else
+    echo "-----------------------------------------"    
+    echo "Master IP: $MASTER_PUBLIC"
+    echo "Node 1 IP: $NODE1_PUBLIC"
+    echo "Node 2 IP: $NODE2_PUBLIC"
     echo "-----------------------------------------"
     echo "Marathon GUI: http://$MASTER_PUBLIC:8080"
     echo "Mesos GUI: http://$MASTER_PUBLIC:5050"
-    echo "Node 1 IP: $NODE1_PUBLIC"
-    echo "Node 2 IP: $NODE2_PUBLIC"
     echo "-----------------------------------------"
 fi
 
