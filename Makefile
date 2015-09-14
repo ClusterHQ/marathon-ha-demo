@@ -1,10 +1,10 @@
 .PHONY: nodes destroy ami app
 
 nodes:
-	@bash createnodes.sh
+	@bash createcluster.sh
 
 destroy:
-	@bash destroynodes.sh
+	@bash destroycluster.sh
 
 ami:
 	@cd amibuilder && bash build.sh
