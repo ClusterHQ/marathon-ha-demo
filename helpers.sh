@@ -155,7 +155,7 @@ wait-for-instances() {
 check-if-load-balancer-exists() {
   local LOAD_BALANCER=$(aws elb describe-load-balancers \
     --load-balancer-name $LOAD_BALANCER_NAME \
-    --query 'LoadBalancerDescriptions[0].LoadBalancerName')
+    --query 'LoadBalancerDescriptions[0].LoadBalancerName' 2>/dev/null )
 
   if [[ "$LOAD_BALANCER" == "$LOAD_BALANCER_NAME" ]]; then
     >&2 echo "$LOAD_BALANCER_NAME load balancer already exists - please delete the load balancer before creating a new cluster"
