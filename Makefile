@@ -1,6 +1,6 @@
 .PHONY: nodes destroy ami app
 
-nodes:
+cluster:
 	@bash createcluster.sh
 
 destroy:
