@@ -44,7 +44,7 @@ mesos-slave() {
   rm /etc/init/mesos-slave.override
 
   sleep 10
-  sudo service mesos-slave start
+  sudo service mesos-slave start &>/dev/null
 }
 
 flocker-control() {
@@ -54,9 +54,9 @@ stop on runlevel [016]
 EOF
   echo 'flocker-control-api       4523/tcp                        # Flocker Control API port' >> /etc/services
   echo 'flocker-control-agent     4524/tcp                        # Flocker Control Agent port' >> /etc/services
-  service flocker-control restart
-  ufw allow flocker-control-api
-  ufw allow flocker-control-agent
+  service flocker-control restart &>/dev/null
+  ufw allow flocker-control-api &>/dev/null
+  ufw allow flocker-control-agent &>/dev/null
 }
 
 flocker-plugin() {
@@ -71,7 +71,7 @@ env FLOCKER_CONTROL_SERVICE_BASE_URL=https://${MASTER_IP}:4523/v1
 env MY_NETWORK_IDENTITY=${MY_ADDRESS}
 exec /usr/local/bin/flocker-docker-plugin
 EOF
-  service flocker-docker-plugin restart
+  service flocker-docker-plugin restart &>/dev/null
 }
 
 flocker-agent() {
@@ -88,8 +88,8 @@ cat <<EOF > /etc/flocker/agent.yml
    "access_key_id": "${AWS_ACCESS_KEY_ID}"
    "secret_access_key": "${AWS_SECRET_ACCESS_KEY}"
 EOF
-  service flocker-container-agent restart
-  service flocker-dataset-agent restart
+  service flocker-container-agent restart &>/dev/null
+  service flocker-dataset-agent restart &>/dev/null
 }
 
 
