@@ -11,4 +11,6 @@ source $DIR/helpers.sh
 
 MASTER_IP=$(get-public-ip-from-name master)
 
-curl -i -H 'Content-type: application/json' --data @app.json http://$MASTER_IP:8080/v2/groups
+cmd="curl -i -H 'Content-type: application/json' --data @app.json http://$MASTER_IP:8080/v2/groups"
+echo $cmd
+exec $cmd
