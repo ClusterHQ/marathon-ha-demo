@@ -9,6 +9,14 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/vars.sh
 source $DIR/helpers.sh
 
+# check the required variables and then
+# see if we have any nodes or load-balancers from previous runs
+check-status() {
+  check-variables
+  check-for-existing-aws-instances
+  check-if-load-balancer-exists
+}
+
 # upload the contents of ./uploads to each node
 # these scripts are used to create certs and provision the cluster
 prepare-instance() {
@@ -128,8 +136,7 @@ ATTRIBUTES='' \
 bash /tmp/install.sh
 }
 
-check-variables
-check-for-existing-aws-instances
+check-status
 create-aws-instances
 wait-for-instances
 prepare-instances
