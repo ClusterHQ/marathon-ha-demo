@@ -4,6 +4,9 @@ cluster:
 	@bash createcluster.sh
 	@bash getinfo.sh
 
+failure:
+	@bash failnode.sh
+
 destroy:
 	@bash destroycluster.sh
 
