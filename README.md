@@ -96,4 +96,5 @@ $ curl -i -H 'Content-type: application/json' --data @app.json http://172.16.79.
 $ make cluster
 $ make app
 $ make failure
+$ make info
 ```
