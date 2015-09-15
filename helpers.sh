@@ -35,6 +35,8 @@ get-private-ip-from-name() {
   get-node-property-from-name $NODE_NAME PrivateIpAddress
 }
 
+
+
 # get the current status of a node based on aws ec2 describe-instance-status
 # if this is not "ok" then the node is not ready yet
 get-node-status() {
@@ -149,6 +151,14 @@ wait-for-instances() {
   do
     wait-for-instance $NODE_NAME
   done
+}
+
+# get the DNS name for the load balancer
+get-load-balancer-dns() {
+    aws elb describe-load-balancers \
+        --region $AWS_REGION \
+        --load-balancer-names $LOAD_BALANCER_NAME \
+        --query 'LoadBalancerDescriptions[0].DNSName'
 }
 
 # ensure that we don't aleady have a load balancer with the specific name
