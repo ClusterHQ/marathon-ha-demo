@@ -139,6 +139,7 @@ bash /tmp/install.sh
 check-status
 create-aws-instances
 wait-for-instances
+create-load-balancer
 prepare-instances
 setup-certs
 setup-master
