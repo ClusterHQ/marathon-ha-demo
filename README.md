@@ -89,3 +89,11 @@ We need to inform Marathon about this application, in order to do this we will p
 ```bash
 $ curl -i -H 'Content-type: application/json' --data @app.json http://172.16.79.250:8080/v2/groups
 ```
+
+### commands
+
+```
+$ make cluster
+$ make app
+$ make failure
+```
