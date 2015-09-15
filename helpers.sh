@@ -112,10 +112,14 @@ create-aws-instances() {
 remove-aws-instance() {
   local NODE_NAME="$1"
   local NODE_ID=$(get-node-id-from-name $NODE_NAME)
-  echo "Removing AWS Instance for: $NODE_NAME"
-  ec2-terminate-instances \
-    --region $AWS_REGION \
-    $NODE_ID
+  local NODE_IP=$(get-public-ip-from-name $NODE_NAME)
+
+  if [[ "$NODE_IP" != "None" ]]; then
+    echo "Removing AWS Instance for: $NODE_NAME"
+    aws ec2 terminate-instances \
+      --region $AWS_REGION \
+      --instance-ids $NODE_ID
+  fi
 }
 
 # loop over the list of hostnames and remove each one
