@@ -2,6 +2,7 @@
 
 cluster:
 	@bash createcluster.sh
+	@bash getinfo.sh
 
 destroy:
 	@bash destroycluster.sh
