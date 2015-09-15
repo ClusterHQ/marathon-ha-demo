@@ -1,4 +1,4 @@
-.PHONY: nodes destroy ami app
+.PHONY: nodes destroy ami app failure info
 
 cluster:
 	@bash createcluster.sh
