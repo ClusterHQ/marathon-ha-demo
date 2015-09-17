@@ -57,7 +57,7 @@ Once you have set your configuration, you can begin.
 To initially get the cluster up we need to set a few environment variables and run `make nodes`.
 
 ```bash
-$ make nodes
+$ make cluster
 ```
 
 This will build a Mesos cluster with three EC2 instances. 
@@ -84,10 +84,28 @@ The end result is a simple stateful application saving the places on a page wher
 
 We need to inform Marathon about this application, in order to do this we will post its application manifest (`app.json`) to the Marathon API with CURL.
 
-> **Note:** You will need to change the IP `172.16.79.250` to the IP of your master server which was displayed when you made the cluster.
+```bash
+$ make app
+```
+
+### Forcing a node to fail
+
+Then - we will terminate the instance the application is running on and watch Marathon reschedule the container and Flocker re-attach the data volume:
 
 ```bash
-$ curl -i -H 'Content-type: application/json' --data @app.json http://172.16.79.250:8080/v2/groups
+$ make failure
+```
+
+Use the Marathon GUI to track the status of the application - it will take around 60 seconds to reschedule the container and re-attach the data-volume.
+
+Once the Marathon GUI shows the application in grey not yellow - you can refresh the URL of the load balancer and you should see the application still with your data intact.
+
+### Cleaning up
+
+Once the demo is complete - you can remove the instances and the load balancer using this command:
+
+```bash
+$ make destroy
 ```
 
 ### commands
