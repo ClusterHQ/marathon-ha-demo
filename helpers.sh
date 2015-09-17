@@ -12,7 +12,7 @@ get-node-property-from-name() {
   local PROPERTY="$2"
   aws ec2 describe-instances \
     --region $AWS_REGION \
-    --filters "Name=tag:Name,Values=marathon-ha-demo-${NODE_NAME}" \
+    --filters "Name=tag:Name,Values=${PREPEND_TAG}-${NODE_NAME}" \
     "Name=instance-state-name,Values=pending,running" \
     --query "Reservations[0].Instances[0].${PROPERTY}"
 }
