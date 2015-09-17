@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-load '../aws_credentials.rb'
+load './aws_credentials.rb'
 
 VAGRANTFILE_API_VERSION = "2"
 

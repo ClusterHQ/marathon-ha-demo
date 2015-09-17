@@ -1,10 +1,20 @@
-.PHONY: cluster ami
+.PHONY: nodes destroy ami app failure info
 
 cluster:
-	bash cluster.sh
+	@bash createcluster.sh
+	@bash getinfo.sh
+
+failure:
+	@bash failnode.sh
 
 destroy:
-	vagrant destroy -f
+	@bash destroycluster.sh
 
 ami:
-	cd amibuilder && bash build.sh
+	@cd amibuilder && bash build.sh
+
+app:
+	@bash createapp.sh
+
+info:
+	@bash getinfo.sh

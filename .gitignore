@@ -13,3 +13,4 @@ ehthumbs.db
 *.box
 .build
 _certs
+test.sh
